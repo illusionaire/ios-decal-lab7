@@ -76,7 +76,7 @@
 - (void)commitAction {
     double operand1 = [_savedOperand doubleValue];
     double operand2 = [_calculationString doubleValue];
-    double total = 0;
+    float total = 0;
     switch (_currentAction) {
         case multiply: {
             total = operand1 * operand2;
@@ -88,13 +88,21 @@
         case add:
             total = operand1 + operand2;
             break;
+        case divide:
+            total = operand1 / operand2;
+            break;
         default:
             break;
     }
     if ([self hasDecimalPlaces:operand1 _:operand2]) {
         _calculationString = [NSString stringWithFormat:@"%.02f", total];
     } else {
-        _calculationString = [NSString stringWithFormat:@"%d", (int)total];
+        if (total == (int)total) {
+            _calculationString = [NSString stringWithFormat:@"%d", (int)total];
+        } else {
+            _calculationString = [NSString stringWithFormat:@"%.02f", total];
+        }
+        
     }
 }
 - (BOOL)recognizeAction: (int)tag {
